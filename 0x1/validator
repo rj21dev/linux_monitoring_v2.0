@@ -1,0 +1,61 @@
+#!/bin/bash
+
+check_arg_1() {
+        if [ ${1:0:1} == "/" ]; then
+                if ! [ -d $1 ]; then
+                        echo "Error: arg_1: This path not exist"
+                        exit 1
+                fi
+        else
+                echo "Error: arg_1: It is not an abolute path"
+                exit 1
+        fi
+	if ! [ -O $1 ]; then
+		echo "Error: arg_1: Permissions dinied"
+		exit 1
+	fi
+}
+
+check_arg_2() {
+        if ! [[ $1 =~ ^[0-9]+$ ]]; then
+                echo "Error: arg_2: Not a number"
+                exit 1
+        fi
+}
+
+check_arg_3() {
+        if ! [[ $1 =~ ^[a-zA-Z]{2,7}$ ]]; then
+                echo "Error: arg_3: The list must contain 2-7 letters"
+                exit 1
+        fi
+}
+
+check_arg_4() {
+        if ! [[ $1 =~ ^[0-9]+$ ]]; then
+                echo "Error: arg_4: Not a number"
+                exit 1
+        fi
+}
+
+check_arg_5() {
+        if ! [[ $1 =~ ^[a-zA-Z]{2,7}[.][a-zA-Z]{2,3}$ ]]; then
+                echo "Error: arg_5: Wrong template"
+                exit 1
+        fi
+}
+
+check_arg_6() {
+        if ! [[ $1 =~ ^[1-9][0-9]?[0]?KB$ ]]; then
+                echo "Error: arg_6: Wrong size"
+                exit 1
+        fi
+}
+
+validating() {
+	check_arg_1 $1
+        check_arg_2 $2
+        check_arg_3 $3
+        check_arg_4 $4
+        check_arg_5 $5
+        check_arg_6 $6
+}

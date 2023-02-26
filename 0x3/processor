@@ -1,0 +1,48 @@
+#!/bin/bash
+
+case_1() {
+	read -p "Enter absolute path to logfile: " path
+	if [ -f $path ]; then
+		list=$(cat $path | awk '{print $3}' | grep '/,' | sed 's/.$//')
+		for item in ${list[@]}; do
+			rm -rf $item
+		done
+	else
+		echo "Error: Wrong path or logfile doesn't exist"	
+	fi
+}
+
+case_2() {
+	local regex="^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$"
+	read -p "Enter start date and time of creation in format YYYY-MM-DD HH:MM: " start 
+	if ! [[ $start =~ $regex ]]; then
+		echo "Error: Invalid date format"
+		exit 1
+	fi
+	read -p "Enter end date and time of creation in format YYYY-MM-DD HH:MM: " end 
+	if ! [[ $end =~ $regex ]]; then
+		echo "Error: Invalid date format"
+		exit 1
+	fi
+	local template=$(echo $start | awk -F'-' '{print $3}' | awk '{print $1}')
+	template+=$(echo $start | awk -F'-' '{print $2}')
+	template+=$(echo $start | awk -F'-' '{print $1}' | tail -c 3)
+	find / -newermt "$start" -not -newermt "$end" -type d 2> /dev/null | grep $template | xargs rm -rf
+}
+
+case_3() {
+	read -p "Enter the date for name mask <xxxxxx_DDMMYY>: " mask
+	if ! [[ $mask =~ ^[0-9]{6}$ ]]; then
+		echo "Error: Invalid date format"
+		exit 1
+	fi
+	find / -path "*_$mask" -type d 2> /dev/null | xargs rm -rf
+}
+
+processing() {
+	case $1 in
+		1) case_1 ;;
+		2) case_2 ;;
+		3) case_3 ;;
+	esac
+}
