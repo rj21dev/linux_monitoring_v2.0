@@ -4,12 +4,16 @@ services:
     image: grafana/grafana:9.4.3-ubuntu
     ports:
       - "3000:3000"
+    volumes:
+      - ${PWD}/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ${PWD}/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ${PWD}/grafana/dashboards:/var/lib/grafana/dashboards
   prometheus:
     image: prom/prometheus:v2.37.6
     ports:
       - "9090:9090"
     volumes:
-      - ${PWD}/prom-conf:/tmp/conf
+      - ${PWD}/prometheus:/tmp/conf
     command:
       - '--config.file=/tmp/conf/prometheus.yml'
   node-exporter:
