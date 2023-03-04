@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function processing() {
+function processing {
 	case $1 in
 		1) sort -k9 ../0x4/access_*.log ;;
 		2) awk '{print $1}' ../0x4/access_*.log | uniq ;;

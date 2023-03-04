@@ -2,7 +2,7 @@
 . ./validator
 . ./processor
 
-if [ $# -eq 1 ]; then
+if [ "$#" -eq 1 ]; then
 	check_param $1
 	processing $1
 else

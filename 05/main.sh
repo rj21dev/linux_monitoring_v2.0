@@ -3,7 +3,7 @@
 . ./validator
 . ./processor
 
-if [ $# -ne 1 ]; then
+if [ "$#" -ne 1 ]; then
 	echo "Usage: ./main.sh [1-4]"
 	echo "1) Print all entries sorted by response code"
 	echo "2) Print all unique IPs found in the entries"

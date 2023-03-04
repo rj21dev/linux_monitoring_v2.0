@@ -3,7 +3,7 @@
 . ./validator
 . ./processor
 
-if [ $# -eq 3 ]; then
+if [ "$#" -eq 3 ]; then
 	path=$(pwd)/
 	validating $1 $2 $3
 	dir_templ=$1

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-create_folder() {
+function create_folder {
         local list_len=${#dir_templ}
         if [ $list_len -lt 4 ]; then
                 local start=2
@@ -22,7 +22,7 @@ create_folder() {
         mkdir $current_path$dir_name
 }
 
-create_file() {
+function create_file {
         local list_len=${#file_templ}
 	local start=2
 	local fin=10
@@ -45,41 +45,25 @@ create_file() {
 	fallocate -l $file_size $current_path$file_name
 }
 
-print_tm(){
-	fin_tm=$(date +%T)
-	fin_sec=$(date +%s)
-	runtime=$(( fin_sec - start_sec ))
-	echo "Script stopped. Free space is about 1Gb now"
-	echo "Script started at $start_tm"
-	echo "Script stopped at $fin_tm"
-	echo "Script runtime: $runtime sec"
-	echo "Script stopped. Free space is about 1Gb now" >> ${path}log.txt
-	echo "Script started at $start_tm" >> ${path}log.txt
-	echo "Script ended at $fin_tm" >> ${path}log.txt
-	echo "Script runtime: $runtime sec" >> ${path}log.txt
-}
-
-
-check_space() {
+function check_space {
 	local current_space=$(df -BM / | awk 'NR==2{print $4}' | cut -d 'M' -f1)
 	if [ $current_space -lt 1024 ];then
-		print_tm
+		echo "Script stopped. Free space is about 1Gb now"
 		exit 0
 	fi
 }
 
-processing() {
+function processing {
+	if [ ${path:-1} != "/" ]; then
+		path+="/"
+	fi
         current_date=$(date +"%d%m%y")
 	current_path=$path
-	start_tm=$(date +%T)
-	start_sec=$(date +%s)
-	local num_subdir=100
 	for ((i=0; i<$num_subdir; i++)); do
 		create_folder
 		current_path+=$dir_name/
 		echo "Dir created: $current_path, Date: $current_date" >> ${path}log.txt
 		cd $current_path
-		local num_files=$(( $RANDOM % 50 + 1 ))
 		for ((j=0; j<$num_files; j++)); do
 			check_space
 			create_file
