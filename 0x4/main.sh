@@ -16,18 +16,19 @@ agents=(
 	"Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36 (compatible; Google-Read-Aloud; +https://support.google.com/webmasters/answer/1061943)"
 	"curl/7.86.0"
 )
+
 for ((j=0; j<5; j++)); do
 	num_str=$(($RANDOM % 901 + 100))
 	file_name=$(date -d "- $((4 - j)) days" +"access_%d-%m-%y.log")
 	for ((i=1; i<$num_str; i++)); do
-		data=$(date -d "- $(( 4 - j)) days - 10 hours + $i minutes + $((15 * i)) seconds" +"[%d/%b/%Y:%H:%M:%S %z]")
+		data=$(date -d "- $(( 4 - j)) days - $(date +%H) hours + $i minutes + $((15 * i)) seconds" +"[%d/%b/%Y:%H:%M:%S %z]")
 		ip=$(($RANDOM % 128 + 1)).$(($RANDOM % 256)).$(($RANDOM % 256)).$(($RANDOM % 256))
 		code=${codes[$(($RANDOM % 11))]}
 		method=${methods[$(($RANDOM % 5))]}
 		agent=${agents[$(($RANDOM % 11))]}
 		url=${urls[$(($RANDOM % 13))]}
 		bytes=$(($RANDOM % 3000 + 255))
-		msg="$ip - - $data \"$method $url HTTP1.1\" $code $bytes \"-\" \"$agent\""
+		msg="$ip - - $data \"$method $url HTTP/1.1\" $code $bytes \"-\" \"$agent\""
 		echo $msg >> $file_name
 	done
 done

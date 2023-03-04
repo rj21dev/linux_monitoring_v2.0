@@ -1,0 +1,8 @@
+#! /bin/bash
+
+function validating() {
+	if ! [[ $1 =~ ^[1-4]$ ]]; then
+		echo "Error: Invalid parameter"
+		exit 1
+	fi
+}

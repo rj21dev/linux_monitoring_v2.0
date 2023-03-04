@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function processing() {
+	case $1 in
+		1) sort -k9 ../0x4/access_*.log ;;
+		2) awk '{print $1}' ../0x4/access_*.log | uniq ;;
+		3) awk '$9 ~ /[4-5][0][0-4]/' ../0x4/access_*.log ;;
+		4) awk '$9 ~ /[4-5][0][0-4]/' ../0x4/access_*.log | awk '{print $1}' | uniq ;;
+	esac
+}
